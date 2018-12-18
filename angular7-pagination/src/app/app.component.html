@@ -1,0 +1,9 @@
+<div class="container">
+
+<h4> Pagination example </h4>
+
+<div *ngFor="let item of pagingItems">{{item.name}}</div>
+<!--manage list size and pagination link [pageSize]="8" [maxPages]="6"-->   
+<pagination [items]="results" [pageSize]="8" [maxPages]="6"   (changePage)="onChangePage($event)"></pagination>
+
+</div>
