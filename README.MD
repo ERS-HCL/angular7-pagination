@@ -4,7 +4,7 @@
 It is a Angular7 pagination component, the data of the pagination is getting from web API. It can customize easily the populate list count and no of pagination list.
 
 <p align="center">
-    <img  alt="Angular7-Pagination" src="img/Pagination.JPG" class="img-responsive">
+    <img  alt="Angular7-Pagination" src="img/pagination.JPG" class="img-responsive">
 </p>
 
 To preview demo of Angular7 pagination project, [click here](https://angular-paginationexample.stackblitz.io)
