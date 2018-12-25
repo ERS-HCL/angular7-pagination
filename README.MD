@@ -4,7 +4,7 @@
 It is a Angular7 pagination component, the data of the pagination is getting from web API. It can customize easily the populate list count and no of pagination list.
 
 <p align="center">
-    <img  alt="Angular7-Pagination" src="img/pagination.JPG" class="img-responsive">
+    <img  alt="Angular7-Pagination" src="img/pagination1.JPG" class="img-responsive">
 </p>
 
 To preview demo of Angular7 pagination project, [click here](https://angular-paginationexample.stackblitz.io)
@@ -33,7 +33,7 @@ In `app.module.ts`,
 import { FormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { PaginationComponent } from './pagination.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 
 declarations: [
@@ -48,32 +48,16 @@ declarations: [
 
 ### Usage : 
 
-In `pagination.component.ts`,
+In `pagination/pagination.component.ts`,
 
 ```javascript
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
-  selector: 'pagination',
-  template: `<ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-  <li [ngClass]="{disabled:pager.currentPage === 1}">
-      <a (click)="setPage(1)">First</a>
-  </li>
-  <li [ngClass]="{disabled:pager.currentPage === 1}">
-      <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-  </li>
-  <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-      <a (click)="setPage(page)">{{page}}</a>
-  </li>
-  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-      <a (click)="setPage(pager.currentPage + 1)">Next</a>
-  </li>
-  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-      <a (click)="setPage(pager.totalPages)">Last</a>
-  </li>
-</ul>`,
+  selector: 'app-pagination',
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.css']
 })
-
 export class PaginationComponent implements OnInit, OnChanges {
   @Input() items: Array<any>;
   @Output() changePage = new EventEmitter<any>(true);
@@ -151,11 +135,62 @@ export class PaginationComponent implements OnInit, OnChanges {
 
 ```
 
+In `pagination/pagination.component.html`,
+
+```html
+<ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+  <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(1)">First</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+  </li>
+  <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <a (click)="setPage(page)">{{page}}</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.currentPage + 1)">Next</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.totalPages)">Last</a>
+  </li>
+</ul>
+
+```
+
+In `pagination/pagination.component.css`,
+
+```css
+.card {
+    background-color: #fff;    
+    margin: 1.5rem;
+    box-shadow: 0 2px 4px 2px rgba(0,0,0,.05);
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,.3);
+}
+.card-body {
+padding: 1.25rem;
+ }
+.pagingContent{
+	min-height:320px;
+}
+
+
+```
+
 In `app.component.ts`,
 ```javascript
 
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { PaginationComponent } from './pagination/pagination.component';
+import {ApiService} from './api.service';
+
 
 @Component({
   selector: 'my-app',
@@ -164,23 +199,25 @@ import { HttpClient, HttpHeaders  } from '@angular/common/http';
 })
 
 export class AppComponent implements OnInit {
-    constructor(private http: HttpClient) { }
-
     items: Array<any>;
     results:any;
     pagingItems: Array<any>;
 
-    ngOnInit() {        
-    var url = "../assets/pagination-data.json";
-    this.http.get(url).subscribe(
-      result => {this.results = result;},
+    constructor(public GetService : ApiService, private http: HttpClient) {      
+    this.GetService.getConfig().subscribe(
+      result => {this.results = result;   console.log(this.results) },
        err => console.error(err), 
-         () => console.log('done')  
-       );            
-    }
-    onChangePage(pagingItems: Array<any>) {
+         () => console.log('completed') );
+
+     }
+onChangePage(pagingItems: Array<any>) {
         this.pagingItems = pagingItems;
-    }    
+    } 
+
+     ngOnInit() {
+   
+
+ }   
 }
 
 
@@ -189,13 +226,18 @@ In `app.component.html`,
 
 ```html
 <div class="container">
-
+<div class="card">
+<div class="card-header">
 <h4> Pagination example </h4>
-
-<div *ngFor="let item of pagingItems">{{item.name}}</div>
-<!--manage list size and pagination link [pageSize]="8" [maxPages]="6"-->   
-<pagination [items]="results" [pageSize]="8" [maxPages]="6"   (changePage)="onChangePage($event)"></pagination>
-
+</div>
+<div class="card-body">
+<div class="pagingContent">
+<div *ngFor="let item of pagingItems">{{item.body}}</div>
+</div>
+<!--manage list size [pageSize]="8" and pagination link [maxPages]="6"-->   
+<app-pagination [items]="results" [pageSize]="8" [maxPages]="6"   (changePage)="onChangePage($event)"></app-pagination>
+</div>
+</div>
 </div>
 
 ```
