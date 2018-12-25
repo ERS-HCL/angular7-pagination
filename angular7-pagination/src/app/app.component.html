@@ -1,9 +1,14 @@
 <div class="container">
-
+<div class="card">
+<div class="card-header">
 <h4> Pagination example </h4>
-
-<div *ngFor="let item of pagingItems">{{item.name}}</div>
-<!--manage list size and pagination link [pageSize]="8" [maxPages]="6"-->   
-<pagination [items]="results" [pageSize]="8" [maxPages]="6"   (changePage)="onChangePage($event)"></pagination>
-
+</div>
+<div class="card-body">
+<div class="pagingContent">
+<div *ngFor="let item of pagingItems">{{item.body}}</div>
+</div>
+<!--manage list size [pageSize]="8" and pagination link [maxPages]="6"-->   
+<app-pagination [items]="results" [pageSize]="8" [maxPages]="6"   (changePage)="onChangePage($event)"></app-pagination>
+</div>
+</div>
 </div>
