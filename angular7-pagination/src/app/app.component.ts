@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { PaginationComponent } from './pagination/pagination.component';
+import {ApiService} from './api.service';
+
 
 @Component({
   selector: 'my-app',
@@ -8,22 +11,23 @@ import { HttpClient, HttpHeaders  } from '@angular/common/http';
 })
 
 export class AppComponent implements OnInit {
-    constructor(private http: HttpClient) { }
-
     items: Array<any>;
     results:any;
     pagingItems: Array<any>;
 
-    ngOnInit() {        
-    var url = "../assets/pagination-data.json";
-    this.http.get(url).subscribe(
-  		result => {this.results = result;},
-  		 err => console.error(err), 
-         () => console.log('done')  
-       );            
-    }
-    onChangePage(pagingItems: Array<any>) {
-        this.pagingItems = pagingItems;
-    }    
-}
+    constructor(public GetService : ApiService, private http: HttpClient) {      
+    this.GetService.getConfig().subscribe(
+      result => {this.results = result;   console.log(this.results) },
+       err => console.error(err), 
+         () => console.log('completed') );
 
+     }
+onChangePage(pagingItems: Array<any>) {
+        this.pagingItems = pagingItems;
+    } 
+
+     ngOnInit() {
+   
+
+ }   
+}
