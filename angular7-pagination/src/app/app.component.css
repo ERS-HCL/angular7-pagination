@@ -5,13 +5,13 @@
 }
 
 .card-header {
-    padding: .75rem 1.25rem;
+    padding: .75rem 1rem;
     margin-bottom: 0;
     background-color: #fff;
     border-bottom: 1px solid rgba(0,0,0,.3);
 }
 .card-body {
-padding: 1.25rem;
+padding: 1rem;
  }
 .pagingContent{
 	min-height:320px;
